@@ -29,4 +29,12 @@ export default class ApiResponse {
       timestamp: new Date().toISOString(),
     };
   }
+
+  validationError(res, errors, message = "Validation Error", status = 422) {
+    return res.status(status).json({
+      status: false,
+      message,
+      errors,
+    });
+  }
 }
