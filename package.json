@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js",
     "mondev": "nodemon server.js",
-    "ts-run": "nodemon mainTs.js"
+    "ts-run": "nodemon main.js"
   },
   "author": "",
   "license": "ISC",
