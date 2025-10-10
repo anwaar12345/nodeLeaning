@@ -5,11 +5,10 @@ import validate from "../middlewares/validationMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", createUserValidation, validate,createUser);
+router.post("/", createUserValidation, validate, createUser);
 router.post("/bulk-insert", createUsersValidation, validate, createUsers);
 router.get("/", getUsers);
 router.get("/:id", getUserById);
 router.put("/:id", updateUser);
 router.delete("/:id", deleteUser);
-
 export default router;
