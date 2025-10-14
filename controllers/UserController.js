@@ -17,7 +17,6 @@ export const createUser = async (req, res) => {
   if (!errors.isEmpty()) {
     return res.status(422).json(apiResponse.error(errors.array(), "Validation Error", 422));
   }
-
   try {
     const result = await usersCollection.insertOne(req.body);
     res.status(201).json(apiResponse.success(result, "User created", null, 201));

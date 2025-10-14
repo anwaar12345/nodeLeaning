@@ -1,15 +1,23 @@
 import { body } from "express-validator";
 
 export const createUserValidation = [
-  body("name")
+    body("name")
+    .exists().withMessage("Name is required")
+    .bail()
     .isString().withMessage("Name must be a string")
+    .bail()
     .isLength({ min: 3 }).withMessage("Name must be at least 3 characters"),
 
   body("email")
+    .exists().withMessage("Email is required")
+    .bail()
     .isEmail().withMessage("Valid email is required"),
 
   body("age")
+    .exists().withMessage("Age is required")
+    .bail()
     .isInt({ min: 18, max: 80 }).withMessage("Age must be between 18 and 80"),
+
 ];
 
 export const updateUserValidation = [

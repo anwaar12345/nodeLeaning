@@ -1,25 +1,29 @@
-import app from './src/main.js'
-import { config } from './config/config.js';
-import mongoose from "mongoose";
-import userRoutes from "./routes/userRoutes.js";
-const port = config.port;
+import express from 'express';
+import { connectDB } from './db/connectDb.js';
+import userRoutes from './routes/userRoutes.js';
 
-// Define route BEFORE listen
-app.use('/users', userRoutes)
+const app = express();
 
-// Global error handler
-app.use((err, req, res, next) => {
-  const statusCode = err.statusCode || 500;
-  console.log("aaya");
-  res.status(statusCode).json({
-    message: err.message,
-    errorStack: config.env === "development" ? err.stack : ""
-  });
-});
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Start server and connect DB
-app.listen(port, () => {
-  mongoose.connect(config.dbURl);
-  mongoose.connection.on('connected', () => console.log('db connected'));
-  console.log(`Server is running on port ${port}`);
-});
+// ✅ Connect to database before starting server
+const startServer = async () => {
+  try {
+    await connectDB();
+    
+    // Routes
+    app.use('/users', userRoutes);
+    
+    app.listen(3000, () => {
+      console.log('Server is running on port 3000');
+      console.log('Database connected');
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+};
+
+startServer();
