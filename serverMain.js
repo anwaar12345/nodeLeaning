@@ -4,16 +4,14 @@ import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 
-// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Connect to database before starting server
 const startServer = async () => {
   try {
     await connectDB();
     
-    // Routes
+
     app.use('/users', userRoutes);
     
     app.listen(3000, () => {

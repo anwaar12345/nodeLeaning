@@ -1,23 +1,20 @@
 import { validationResult } from "express-validator";
 import { ObjectId } from "mongodb";
 import ApiResponse from "../utils/ResponseHelper.js";
-
 const apiResponse = new ApiResponse();
-
-let usersCollection;
-
-
-export const setUserCollection = (collection) => {
-  usersCollection = collection;
-};
+import { setUserCollection } from "../models/User.js";
 
 // Create user
 export const createUser = async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(422).json(apiResponse.error(errors.array(), "Validation Error", 422));
+    return res
+      .status(422)
+      .json(apiResponse.error(errors.array(), "Validation Error", 422));
   }
+
   try {
+    const usersCollection = setUserCollection(); // ✅ now we get collection here
     const result = await usersCollection.insertOne(req.body);
     res.status(201).json(apiResponse.success(result, "User created", null, 201));
   } catch (err) {
@@ -28,6 +25,8 @@ export const createUser = async (req, res) => {
 // Get all users
 export const getUsers = async (req, res) => {
   try {
+
+    const usersCollection = setUserCollection(); 
     const users = await usersCollection.find().toArray();
     res.json(apiResponse.success(users));
   } catch (err) {
