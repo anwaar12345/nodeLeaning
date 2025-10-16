@@ -15,7 +15,13 @@ export const createUser = async (req, res) => {
 
   try {
     const usersCollection = setUserCollection(); // ✅ now we get collection here
-    const result = await usersCollection.insertOne(req.body);
+    const {name,email,age} = req.body;
+    
+    const result = await usersCollection.insertOne({
+      name,
+      email,
+      age
+    });
     res.status(201).json(apiResponse.success(result, "User created", null, 201));
   } catch (err) {
     res.status(500).json(apiResponse.error(err.message, "Database Error", 500));
