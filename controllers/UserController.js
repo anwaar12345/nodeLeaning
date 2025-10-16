@@ -4,6 +4,7 @@ import ApiResponse from "../utils/ResponseHelper.js";
 const apiResponse = new ApiResponse();
 import { setUserCollection } from "../models/User.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 // Create user
 export const createUser = async (req, res) => {
   const errors = validationResult(req);
@@ -23,7 +24,9 @@ export const createUser = async (req, res) => {
       age,
       password
     });
-    res.status(201).json(apiResponse.success(result, "User created", null, 201));
+    const token = jwt.sign({ sub: result.insertedId.toString()}, 'AajTuDinHyKalBThaQTmhynNiPTa', { expiresIn: '1h' });
+    res.status(201).json(apiResponse.success(token, "User created", null, 201));
+
   } catch (err) {
     res.status(500).json(apiResponse.error(err.message, "Database Error", 500));
   }
