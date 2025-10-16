@@ -3,7 +3,7 @@ import { ObjectId } from "mongodb";
 import ApiResponse from "../utils/ResponseHelper.js";
 const apiResponse = new ApiResponse();
 import { setUserCollection } from "../models/User.js";
-
+import bcrypt from "bcrypt";
 // Create user
 export const createUser = async (req, res) => {
   const errors = validationResult(req);
@@ -15,12 +15,13 @@ export const createUser = async (req, res) => {
 
   try {
     const usersCollection = setUserCollection(); // ✅ now we get collection here
-    const {name,email,age} = req.body;
-    
+    let {name,email,age,password} = req.body;
+    password = await bcrypt.hash(password, 12);
     const result = await usersCollection.insertOne({
       name,
       email,
-      age
+      age,
+      password
     });
     res.status(201).json(apiResponse.success(result, "User created", null, 201));
   } catch (err) {

@@ -18,6 +18,15 @@ export const createUserValidation = [
     .bail()
     .isInt({ min: 18, max: 80 }).withMessage("Age must be between 18 and 80"),
 
+   body("password")
+  .exists().withMessage("Password is required")
+  .bail()
+  .isLength({ min: 8, max: 12 })
+  .withMessage("Password must be between 8 and 12 characters long")
+  .matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,12}$/)
+  .withMessage("Password must contain letters, numbers, and at least one special character")
+  
+
 ];
 
 export const updateUserValidation = [
