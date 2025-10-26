@@ -5,6 +5,9 @@ const apiResponse = new ApiResponse();
 import { setUserCollection } from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import {config as conf} from "dotenv";
+conf();
+
 // Create user
 export const createUser = async (req, res) => {
   const errors = validationResult(req);
@@ -24,7 +27,7 @@ export const createUser = async (req, res) => {
       age,
       password
     });
-    const token = jwt.sign({ sub: result.insertedId.toString()}, 'AajTuDinHyKalBThaQTmhynNiPTa', { expiresIn: '1h' });
+    const token = jwt.sign({ sub: result.insertedId.toString()}, process.env.JWT_SEC, { expiresIn: '1h' });
     res.status(201).json(apiResponse.success(token, "User created", null, 201));
 
   } catch (err) {
