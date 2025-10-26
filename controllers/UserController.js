@@ -21,6 +21,12 @@ export const createUser = async (req, res) => {
     const usersCollection = setUserCollection(); // ✅ now we get collection here
     let {name,email,age,password} = req.body;
     password = await bcrypt.hash(password, 12);
+    let user  = await usersCollection.findOne({email: email});
+    if(user){
+      res.status(400).json(
+        apiResponse.success(user, "User already exists", null, 400)
+      );
+    }
     const result = await usersCollection.insertOne({
       name,
       email,
