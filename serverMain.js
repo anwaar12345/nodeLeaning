@@ -1,6 +1,7 @@
 import express from 'express';
 import { connectDB } from './db/connectDb.js';
 import userRoutes from './routes/userRoutes.js';
+import authRoutes from './routes/auth.js';
 
 const app = express();
 
@@ -13,6 +14,7 @@ const startServer = async () => {
     
 
     app.use('/users', userRoutes);
+    app.use('/', authRoutes);
     
     app.listen(3000, () => {
       console.log('Server is running on port 3000');
